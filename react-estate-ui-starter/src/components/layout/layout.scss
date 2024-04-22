@@ -1,4 +1,4 @@
-@import "./responsive.scss";
+@import "../../responsive.scss";
 .layout {
   height: 100vh;
   max-width: 1336px;
@@ -23,7 +23,8 @@
   }
   .content {
     //background-color: blue;
-    flex: 1;
+    height: calc(100vh - 100px);
+    //flex: 1;
     // height: calc(100vh - 100px);
   }
 }
