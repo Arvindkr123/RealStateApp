@@ -17,7 +17,9 @@ export const register = async (req, res) => {
       },
     });
 
-    res.status(201).json({ message: "User created successfully!", newUser });
+    const { password: UserPassoword, ...userInfo } = newUser;
+
+    res.status(201).json({ message: "User created successfully!", userInfo });
   } catch (error) {
     console.error("Error registering user:", error);
     res.status(500).json({ error: "Something went wrong" });
@@ -47,9 +49,14 @@ export const login = async (req, res) => {
     // GENERATE THE TOKEN AND SEND TO THE USER
     // res.setHeader("Set-Cookie", "test =" + "myValue").json({ success: true });
     const age = 1000 * 60 * 60 * 24 * 7;
-    const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
-      expiresIn: age,
-    });
+    const token = jwt.sign(
+      { id: user.id, isAdmin: true },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: age,
+      }
+    );
+    const { password: UserPassword, ...userInfo } = user;
     res
       .cookie("token", token, {
         httpOny: true,
@@ -57,7 +64,7 @@ export const login = async (req, res) => {
         maxAge: age,
       })
       .status(200)
-      .json({ message: "Login successful" });
+      .json({ user: userInfo });
   } catch (error) {
     console.error("Error registering user:", error);
     res.status(500).json({ error: error.message || "Something went wrong" });

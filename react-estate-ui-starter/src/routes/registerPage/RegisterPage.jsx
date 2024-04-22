@@ -2,17 +2,21 @@ import { Link, useNavigate } from "react-router-dom";
 import "./registerPage.scss";
 import axios from "axios";
 import { useState } from "react";
+import apiRequest from "../../lib/apiRequest";
 function RegisterPage() {
   const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
+    setError("");
     const fromData = new FormData(e.target);
     const username = fromData.get("username");
     const email = fromData.get("email");
     const password = fromData.get("password");
     try {
-      const res = await axios.post("http://localhost:4000/api/register", {
+      const res = await apiRequest.post("/register", {
         username,
         email,
         password,
@@ -22,6 +26,8 @@ function RegisterPage() {
     } catch (err) {
       console.log(err);
       setError(err.response.data.message);
+    } finally {
+      setIsLoading(false);
     }
     console.log(username, email, password);
   };
@@ -33,7 +39,9 @@ function RegisterPage() {
           <input name="username" type="text" placeholder="Username" />
           <input name="email" type="email" placeholder="Email" />
           <input name="password" type="password" placeholder="Password" />
-          <button>Register</button>
+          <button type="submit" disabled={isLoading}>
+            Register
+          </button>
           {error && <span>{error}</span>}
           <Link to="/login">Do you have an account ?</Link>
         </form>

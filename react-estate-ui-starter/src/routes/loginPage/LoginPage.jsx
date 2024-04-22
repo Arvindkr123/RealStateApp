@@ -1,26 +1,32 @@
 import { Link, useNavigate } from "react-router-dom";
 import "./loginPage.scss";
 import { useState } from "react";
+import apiRequest from "../../lib/apiRequest";
 function LoginPage() {
   const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
+    setError("");
     const fromData = new FormData(e.target);
     const username = fromData.get("username");
     const password = fromData.get("password");
     try {
-      const res = await axios.post("http://localhost:4000/api/login", {
+      const res = await apiRequest.post("/login", {
         username,
         password,
       });
-      console.log(res.data);
-      navigate("/login");
+      // console.log(res.data);
+      localStorage.setItem("user", JSON.stringify(res.data));
+      navigate("/");
     } catch (err) {
       console.log(err);
       setError(err.response.data.message);
+    } finally {
+      setIsLoading(false);
     }
-    console.log(username, email, password);
   };
   return (
     <div className="loginPage">
@@ -41,7 +47,9 @@ function LoginPage() {
             required
             placeholder="Password"
           />
-          <button>Login</button>
+          <button disabled={isLoading} type="submit">
+            Login
+          </button>
           <span>Error</span>
           <Link to="/register">{"Don't"} you have an account?</Link>
         </form>
