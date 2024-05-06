@@ -28,6 +28,7 @@ export const updateUser = async (req, res) => {
   try {
     const id = req.params.id;
     const tokenUserId = req.userId;
+    //console.log(req.body);
     if (id !== tokenUserId) {
       return res.status(403).json({ message: "Not Authorized!" });
     }

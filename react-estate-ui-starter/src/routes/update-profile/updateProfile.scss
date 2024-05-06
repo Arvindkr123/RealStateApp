@@ -52,9 +52,12 @@
     background-color: #fcf5f3;
     display: flex;
     align-items: center;
+    gap: 20px;
     justify-content: center;
+    flex-direction: column;
     img {
-      width: 100%;
+      width: 300px;
+      width: 300px;
     }
   }
 }
