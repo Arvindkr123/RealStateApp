@@ -15,7 +15,7 @@ app.use(cookieParser());
 
 app.use("/api", authRoutes);
 app.use("/api/users", userRoutes);
-app.use("/api/post", postRoutes);
+app.use("/api/posts", postRoutes);
 
 app.listen(4000, async () => {
   console.log("server listening on http://localhost:4000");

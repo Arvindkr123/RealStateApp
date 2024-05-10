@@ -1,29 +1,32 @@
+import { useLoaderData } from "react-router-dom";
 import Map from "../../components/map/Map";
 import Slider from "../../components/slider/Slider";
 import { singlePostData, userData } from "../../lib/DummyData";
 import "./singlePage.scss";
 function SinglePage() {
+  const post = useLoaderData();
+  console.log(post);
   return (
     <div className="singlePage">
       <div className="details">
         <div className="wrapper">
-          <Slider images={singlePostData.images} />
+          <Slider images={post.images} />
           <div className="info">
             <div className="top">
               <div className="post">
-                <h1>{singlePostData.title}</h1>
+                <h1>{post.title}</h1>
                 <div className="address">
                   <img src={"/pin.png"} alt="location image" />
-                  <span>{singlePostData.address}</span>
+                  <span>{post.address}</span>
                 </div>
-                <div className="price">$ {singlePostData.price}</div>
+                <div className="price">$ {post.price}</div>
               </div>
               <div className="user">
                 <img src={userData.img} alt="user image" />
                 <span>{userData.name}</span>
               </div>
             </div>
-            <div className="bottom">{singlePostData.description}</div>
+            <div className="bottom">{post.description}</div>
           </div>
         </div>
       </div>
@@ -94,7 +97,7 @@ function SinglePage() {
           </div>
           <p className="title">Location</p>
           <div className="mapContainer">
-            <Map items={[singlePostData]} />
+            <Map items={[post]} />
           </div>
           <div className="buttons">
             <button>

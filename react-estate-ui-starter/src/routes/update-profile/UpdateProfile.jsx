@@ -8,9 +8,9 @@ function UpdateProfile() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const { currentUser, updateUser } = useAuthContext();
-  console.log(currentUser);
-  const [avatar, setAvatar] = useState(currentUser.avatar);
-  console.log(currentUser);
+  //console.log(currentUser);
+  const [avatar, setAvatar] = useState([]);
+  // console.log(currentUser);
   const navigate = useNavigate();
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -23,7 +23,7 @@ function UpdateProfile() {
         username,
         email,
         password,
-        avatar,
+        avatar: avatar[0],
       });
       updateUser(res.data);
       navigate("/profile");
@@ -60,16 +60,16 @@ function UpdateProfile() {
       </div>
 
       <div className="imgContainer">
-        <img src={avatar || "/noavatar.png"} alt="" />
+        <img src={avatar[0] || currentUser.avatar || "/noavatar.png"} alt="" />
         <UploadWidget
           uwConfig={{
             cloudName: "dscimohhw",
             uploadPreset: "realEstate",
-            multiple: false,
+            multiple: true,
             maxImageFileSize: 2000000,
             folders: "avatars",
           }}
-          setAvatar={setAvatar}
+          setState={setAvatar}
         />
       </div>
     </div>

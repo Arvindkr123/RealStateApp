@@ -1,9 +1,19 @@
 import { Router } from "express";
+import { verifyToken } from "../middleware/verifyToken.middleware.js";
+import {
+  addPost,
+  deletePost,
+  getPost,
+  getPosts,
+  updatePost,
+} from "../controllers/post.controllers.js";
 
 const router = Router();
 
-router.post("/", (req, res) => {
-  res.json({ msg: "hello world" });
-});
+router.get("/", getPosts);
+router.get("/:id", getPost);
+router.post("/", verifyToken, addPost);
+router.put("/:id", verifyToken, updatePost);
+router.delete("/:id", verifyToken, deletePost);
 
 export default router;
