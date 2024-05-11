@@ -33,7 +33,7 @@ function NewPostPage() {
         },
         postDetail: {
           desc: value,
-          utilites: inputs.utilites,
+          utilities: inputs.utilites,
           pet: inputs.pet,
           income: inputs.income,
           size: parseInt(inputs.size),
