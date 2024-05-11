@@ -3,7 +3,10 @@ import Card from "../../components/card/Card.jsx";
 import { listData } from "../../lib/DummyData";
 import "./listPage.scss";
 import Map from "../../components/map/Map.jsx";
+import { useLoaderData } from "react-router-dom";
 const ListPage = () => {
+  const listData = useLoaderData();
+  console.log(listData);
   const data = listData;
   return (
     <div className="listPage">
