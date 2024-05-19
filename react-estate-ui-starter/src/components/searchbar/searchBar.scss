@@ -63,20 +63,25 @@
         border: 1px solid #999;
       }
     }
-
-    button {
-      border: none;
-      cursor: pointer;
-      background-color: #fcce51;
+    a {
       flex: 1;
+      background-color: #fcce51;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      button {
+        border: none;
+        cursor: pointer;
+        background-color: #fcce51;
 
-      @include sm {
-        padding: 10px;
-      }
+        @include sm {
+          padding: 10px;
+        }
 
-      img {
-        width: 24px;
-        height: 24px;
+        img {
+          width: 24px;
+          height: 24px;
+        }
       }
     }
   }
