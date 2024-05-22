@@ -1,4 +1,6 @@
+import { JWT_SECRET } from "../config/config.js";
 import prisma from "../lib/prisma.js";
+import jwt from "jsonwebtoken";
 
 export const getPosts = async (req, res) => {
   const query = req.query;
@@ -49,8 +51,33 @@ export const getPost = async (req, res) => {
     if (!post) {
       return res.status(404).json({ message: "Post not found" });
     }
+
+    let userId;
+    const token = req.cookies?.token;
+    console.log("token from get post", req.cookies);
+    if (!token) {
+      userId = null;
+    } else {
+      jwt.verify(token, JWT_SECRET, async (err, payload) => {
+        if (err) {
+          userId = null;
+        } else {
+          userId = payload.id;
+        }
+      });
+    }
+
+    const savedPost = await prisma.savePost.findUnique({
+      where: {
+        userId_postId: {
+          postId: id,
+          userId,
+        },
+      },
+    });
+
     setTimeout(() => {
-      res.status(200).json(post);
+      res.status(200).json({ ...post, isSaved: savedPost ? true : false });
     }, 3000);
   } catch (error) {
     console.log(error);
@@ -94,6 +121,41 @@ export const deletePost = async (req, res) => {
 
     await prisma.post.delete({ where: { id } });
     res.status(200).json({ message: "post deleted successfully!" });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: error.message });
+  }
+};
+
+export const savePost = async (req, res) => {
+  const postId = req.body.postId;
+  const tokenUserId = req.userId;
+  try {
+    const savePost = await prisma.savePost.findUnique({
+      where: {
+        userId_postId: {
+          userId: tokenUserId,
+          postId,
+        },
+      },
+    });
+
+    if (savePost) {
+      await prisma.savePost.delete({
+        where: {
+          id: savePost.id,
+        },
+      });
+      res.status(200).json({ message: "Post removed from saved list" });
+    } else {
+      await prisma.savePost.create({
+        data: {
+          userId: tokenUserId,
+          postId,
+        },
+      });
+      res.status(200).json({ message: "Post  saved successfully!" });
+    }
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: error.message });

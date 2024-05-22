@@ -5,11 +5,13 @@ import {
   getUser,
   getUsers,
   updateUser,
+  getProfilePostsController,
 } from "../controllers/users.controllers.js";
 
 const router = Router();
 
 router.route("/").get(getUsers);
+router.route("/profilePosts").get(verifyToken, getProfilePostsController);
 router
   .route("/:id")
   .get(verifyToken, getUser)
